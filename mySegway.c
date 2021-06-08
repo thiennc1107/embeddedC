@@ -141,6 +141,10 @@ int main(int argc, char *argv[])
   
   //handle when program terminate
   signal(SIGINT, handle_sigint);
+  PID = readPID();
+    Kp = PID[0];
+    Ki = PID[1];
+    Kd = PID[2];
   if (argc==2 &&strcmp(argv[1],"-d")==0)
   {
     PID = getPID();
@@ -148,13 +152,6 @@ int main(int argc, char *argv[])
     Ki = PID[1];
     Kd = PID[2];
   } 
-  else
-  {
-    PID = readPID();
-    Kp = PID[0];
-    Ki = PID[1];
-    Kd = PID[2];
-  }
   init_motors();
   delay(200);
   char cmd1[200];
@@ -187,6 +184,7 @@ int main(int argc, char *argv[])
       Ki = PID[1];
       Kd = PID[2];
     } 
+    printf("ki=%f kp=%f kd=%f",Ki,Kp,Kd);
     t = getTimestamp();
     deltaT = (double) (t - timer)/1000000.0;
     timer = t;
