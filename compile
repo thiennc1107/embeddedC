@@ -1,0 +1,1 @@
+gcc -o output_file $(mariadb_config --cflags) source_code.c $(mariadb_config --libs) -g

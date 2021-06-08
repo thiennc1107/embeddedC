@@ -3,14 +3,13 @@
 #include  <stdlib.h>
 #include  <math.h>
 #include  <sys/time.h>
-#include <mysql.h>
-
 
 // PID parameters
 double Kp = 2.5;   // 2.5
 double Ki = 0.8;   // 1.0
 double Kd = 8.0;   // 8.0
 double K  = 1.9*1.12;
+double *PID;
 
 
 // Complimentary Filter parameters
@@ -105,7 +104,6 @@ double constrain(double v, double min_v, double max_v)
 double GUARD_GAIN = 100.0;
 double error, last_error, integrated_error;
 double pTerm, iTerm, dTerm;
-double angle;
 double angle_offset = 2.0;  //1.5
 
 double speed;
@@ -127,17 +125,16 @@ void pid()
   
 }
 
-int main()
+//program argument 0 for normal, 1 for tuning mode
+int main(int arg)
 {
-  MYSQL *conn;
-  MYSQL_RES *res;
-  MYSQL_ROW *row;
-  char *server = "localhost";
-  char *user = "thiennc";
-  char *password = "11072001";
-  char *database = "embedded";
-  conn = mysql_init(NULL);
-  mysql_real_connect(conn,server,user,password,database,0,NULL,0);
+  if (arg==1)
+  {
+    PID = getPID();
+    Kp = PID[0];
+    Ki = PID[1];
+    Kd = PID[2];
+  } 
   init_motors();
   delay(200);
   char cmd1[200];
@@ -163,6 +160,7 @@ int main()
 
 
   while(1) {
+    Ki = getPID()
     t = getTimestamp();
     deltaT = (double) (t - timer)/1000000.0;
     timer = t;
@@ -194,11 +192,8 @@ int main()
       stop_motors();
 
     pid();
+    upLoad(error,speed,last_y);
     printf("%lf\t%lf\t%lf\t%lf\t%lf\n", error, speed, pTerm, iTerm, dTerm);
-    sprintf(cmd1,"UPDATE `status` SET `speed`=%d,`angle`=%d WHERE STT=1",speed,last_y);
-    mysql_query(conn,cmd1);
-    sprintf(cmd1,"UPDATE `control` SET `error`=%d WHERE STT=1",error);
-    mysql_query(conn,cmd2);
     motors(speed, 0.0, 0.0);
     
     delay(10);
