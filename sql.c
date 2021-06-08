@@ -2,15 +2,16 @@
 #include <stdio.h>
 #include <stdlib.h> 
 #include<unistd.h>
+MYSQL *conn;
+MYSQL_RES *res;
+MYSQL_ROW row;
 char *server = "localhost";
 char *user = "thiennc";
 char *password = "11072001";
 char *database = "embedded";
 double * getPID(void)
 {
-    MYSQL *conn;
-    MYSQL_RES *res;
-    MYSQL_ROW row;
+    
     conn = mysql_init(NULL);
     mysql_real_connect(conn,server,user,password,database,0,NULL,0);
     char data[10];
@@ -32,7 +33,6 @@ double * getPID(void)
 }
 void upLoad(double error,double speed,double angle)
 {
-    MYSQL *conn;
     conn = mysql_init(NULL);
     mysql_real_connect(conn,server,user,password,database,0,NULL,0);
     char cmd[200];
@@ -41,5 +41,7 @@ void upLoad(double error,double speed,double angle)
     mysql_close(conn);
 
 }
+
+
 
 

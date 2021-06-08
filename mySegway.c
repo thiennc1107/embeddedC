@@ -125,9 +125,21 @@ void pid()
   
 }
 
+void handle_sigint()
+{
+    printf("stopping...");
+    stop_motors();
+
+}
+
+
+
 //program argument 0 for normal, 1 for tuning mode
 int main(int arg)
 {
+  
+  //handle when program terminate
+  signal(SIGINT, handle_sigint);
   if (arg==1)
   {
     PID = getPID();
@@ -179,10 +191,10 @@ int main(int arg)
     rotation_x = get_x_rotation(accl_scaled_x, accl_scaled_y, accl_scaled_z);
     rotation_y = get_y_rotation(accl_scaled_x, accl_scaled_y, accl_scaled_z);
 
-    printf("[BEFORE] gyro_scaled_y=%f, deltaT=%lf, rotation_y=%f, last_y= %f\n", (double)gyro_scaled_y, (double)deltaT, (double)rotation_y, (double) last_y);
+    //printf("[BEFORE] gyro_scaled_y=%f, deltaT=%lf, rotation_y=%f, last_y= %f\n", (double)gyro_scaled_y, (double)deltaT, (double)rotation_y, (double) last_y);
 
-    printf("[1st part] = %f\n", (double) K0*(last_y + gyro_y_delta));
-    printf("[2nd part] = %f\n", (double) K1*rotation_y);
+    //printf("[1st part] = %f\n", (double) K0*(last_y + gyro_y_delta));
+    //printf("[2nd part] = %f\n", (double) K1*rotation_y);
     last_x = K0 * (last_x + gyro_x_delta) + (K1 * rotation_x);
     last_y = K0 * (last_y + gyro_y_delta) + (K1 * rotation_y);
 
@@ -193,7 +205,7 @@ int main(int arg)
 
     pid();
     upLoad(error,speed,last_y);
-    printf("%lf\t%lf\t%lf\t%lf\t%lf\n", error, speed, pTerm, iTerm, dTerm);
+    //
     motors(speed, 0.0, 0.0);
     
     delay(10);
