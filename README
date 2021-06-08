@@ -1,0 +1,6 @@
+gcc -o main $(mariadb_config --cflags) ./mySegway.c ./motors.c ./fileHandle.c ./sql.c $(mariadb_config --libs) -g -lwiringPi -lpthread -lm 
+
+run with constPID
+./main
+run with webPID
+./main -d

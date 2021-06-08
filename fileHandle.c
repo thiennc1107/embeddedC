@@ -21,7 +21,7 @@ double * readPID()
     fclose(file);
     return PID;
 }
-int savePID(double P,double I,double D)
+int writePID(double P,double I,double D)
 {
     FILE * fp;
     /* open the file for writing*/

@@ -129,7 +129,7 @@ void handle_sigint()
 {
     printf("stopping...");
     stop_motors();
-    savePID(Kp,Ki,Kd);
+    writePID(Kp,Ki,Kd);
 
 }
 
@@ -227,6 +227,6 @@ int main(int argc, char *argv[])
   }
 
   stop_motors();
-  savePID(Kp,Ki,Kd);
+  writePID(Kp,Ki,Kd);
   return 0;
 }
