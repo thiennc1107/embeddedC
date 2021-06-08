@@ -5,9 +5,9 @@
 #include  <sys/time.h>
 
 // PID parameters
-double Kp = 2.5;   // 2.5
-double Ki = 0.8;   // 1.0
-double Kd = 8.0;   // 8.0
+double Kp ;   // 2.5
+double Ki ;   // 1.0
+double Kd ;   // 8.0
 double K  = 1.9*1.12;
 double *PID;
 
