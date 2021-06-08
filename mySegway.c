@@ -129,7 +129,7 @@ void handle_sigint()
 {
     printf("stopping...");
     stop_motors();
-    savePID();
+    savePID(Kp,Ki,Kd);
 
 }
 
@@ -141,13 +141,20 @@ int main(int argc, char *argv[])
   
   //handle when program terminate
   signal(SIGINT, handle_sigint);
-  if (arg==1)
+  if (argc==2 &&strcmp(argv[1],"-d")==0)
   {
     PID = getPID();
     Kp = PID[0];
     Ki = PID[1];
     Kd = PID[2];
   } 
+  else
+  {
+    PID = readPID();
+    Kp = PID[0];
+    Ki = PID[1];
+    Kd = PID[2];
+  }
   init_motors();
   delay(200);
   char cmd1[200];
@@ -173,7 +180,13 @@ int main(int argc, char *argv[])
 
 
   while(1) {
-    Ki = getPID()
+    if (argc==2 &&strcmp(argv[1],"-d")==0)
+    {
+      PID = getPID();
+      Kp = PID[0];
+      Ki = PID[1];
+      Kd = PID[2];
+    } 
     t = getTimestamp();
     deltaT = (double) (t - timer)/1000000.0;
     timer = t;
@@ -198,11 +211,12 @@ int main(int argc, char *argv[])
     //printf("[2nd part] = %f\n", (double) K1*rotation_y);
     last_x = K0 * (last_x + gyro_x_delta) + (K1 * rotation_x);
     last_y = K0 * (last_y + gyro_y_delta) + (K1 * rotation_y);
-
-    printf("[AFTER] gyro_scaled_y=%f, deltaT=%lf, rotation_y=%f, last_y=%f\n", (double)gyro_scaled_y, (double)deltaT, (double)rotation_y, (double) last_y);
     
     if (last_y < -60.0 || last_y > 60.0) 
-      stop_motors();
+      {
+        stop_motors();
+        break;
+      }
 
     pid();
     upLoad(error,speed,last_y);
@@ -213,5 +227,6 @@ int main(int argc, char *argv[])
   }
 
   stop_motors();
+  savePID(Kp,Ki,Kd);
   return 0;
 }
