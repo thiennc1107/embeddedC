@@ -129,13 +129,14 @@ void handle_sigint()
 {
     printf("stopping...");
     stop_motors();
+    savePID();
 
 }
 
 
 
 //program argument 0 for normal, 1 for tuning mode
-int main(int arg)
+int main(int argc, char *argv[])
 {
   
   //handle when program terminate
