@@ -9,7 +9,7 @@
 double Kp ;   // 2.5
 double Ki ;   // 1.0
 double Kd ;   // 8.0
-double K  = 1.9*1.12;
+double K  = 1;
 double *PID;
 
 

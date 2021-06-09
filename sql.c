@@ -42,11 +42,7 @@ void upLoad(double error,double speed,double angle)
 
 }
 
-int main(int argc, char const *argv[])
-{
-    double *PID = getPID();
-    return 0;
-}
+
 
 
 
