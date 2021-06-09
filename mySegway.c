@@ -3,6 +3,7 @@
 #include  <stdlib.h>
 #include  <math.h>
 #include  <sys/time.h>
+#include  <signal.h>
 
 // PID parameters
 double Kp ;   // 2.5
