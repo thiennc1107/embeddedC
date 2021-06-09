@@ -140,12 +140,14 @@ void handle_sigint()
 int main(int argc, char *argv[])
 {
   
-  //handle when program terminate
+  //handle when program terminate to avoid motor being stop suddenly, also save the PID parameter
   signal(SIGINT, handle_sigint);
+  //read PID parameter from predefined file
   PID = readPID();
     Kp = PID[0];
     Ki = PID[1];
     Kd = PID[2];
+  // program argument for running development mode , which we cane tune PID via web server
   if (argc==2 &&strcmp(argv[1],"-d")==0)
   {
     PID = getPID();
@@ -153,19 +155,21 @@ int main(int argc, char *argv[])
     Ki = PID[1];
     Kd = PID[2];
   } 
+  //initialize motor and PWM configuration
   init_motors();
   delay(200);
   char cmd1[200];
   char cmd2[200];
+  // connect with MPU6050
   fd = wiringPiI2CSetup (0x68);
   wiringPiI2CWriteReg8 (fd,0x6B,0x00);//disable sleep mode 
 //  printf("set 0x6B=%X\n",wiringPiI2CReadReg8 (fd,0x6B));
-
+  //
   timer = getTimestamp();
 
   deltaT = (double) (getTimestamp() - timer)/1000000.0;
   read_all();
-
+  //get the rotation of MPU to perform PID control
   last_x = get_x_rotation(accl_scaled_x, accl_scaled_y, accl_scaled_z);
   last_y = get_y_rotation(accl_scaled_x, accl_scaled_y, accl_scaled_z);
 

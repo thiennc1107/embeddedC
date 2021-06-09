@@ -4,3 +4,5 @@ run with constPID
 ./main
 run with webPID
 ./main -d
+In this project , we create a 2 wheeled auto balancing robot by using MPU 6050 and LM298 motor driver, 
+the control description is commented in the main function of the program  
