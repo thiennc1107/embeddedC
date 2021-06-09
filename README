@@ -5,4 +5,6 @@ run with constPID
 run with webPID
 ./main -d
 In this project , we create a 2 wheeled auto balancing robot by using MPU 6050 and LM298 motor driver, 
-the control description is commented in the main function of the program  
+The program including connecting with MPU 6050 via I2c, then base on the y angle , we perform PID control to keep the angle 0 degree
+after perform each PID control loop, we push the motor PWM data as speed data and the angle data and PID control error to web server database
+In run with webPID constant, the program update PID parameter from web server . 
