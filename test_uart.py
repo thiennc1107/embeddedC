@@ -1,4 +1,3 @@
-import time 
 import serial 
 import RPi.GPIO as GPIO
 import mysql.connector as mariadb
