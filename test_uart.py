@@ -17,11 +17,13 @@ except mariadb.Error as e:
   sys.exit()
 conn.autocommit = True
 cur = conn.cursor()
-red = 3
+yellow = 3
 green = 5
+red = 7
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(red,GPIO.OUT)
 GPIO.setup(green,GPIO.OUT)
+GPIO.setup(yellow,GPIO.OUT)
 
 ser = serial.Serial(
   port = '/dev/serial0',
@@ -42,12 +44,18 @@ try:
     data = data.rstrip()
     if(data != ''):
       data_int = int(data)
-      if(data_int<100):
+      if(data_int<50):
         GPIO.output(green,GPIO.HIGH)
         GPIO.output(red,GPIO.LOW)
+        GPIO.output(yellow,GPIO.LOW)
+      elif (data_int>50 and data_int <100):
+        GPIO.output(red,GPIO.LOW)
+        GPIO.output(green,GPIO.LOW)
+        GPIO.output(yellow,GPIO.HIGH)
       else:
         GPIO.output(red,GPIO.HIGH)
-        GPIO.output(green,GPIO.LOW)
+        GPIO.ouput(green,GPIO.LOW)
+        GPIO.output(yellow,GPIO.LOW)
       val = (data,)
       cur.execute(sql,val)
 except KeyboardInterrupt:
